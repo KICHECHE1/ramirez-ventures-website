@@ -1,5 +1,6 @@
 "use client";
 
+import type { MouseEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, ChevronRight, MessageCircle } from "lucide-react";
@@ -13,13 +14,39 @@ const WHATSAPP = "254706207037";
 export default function CartPage() {
   const { items, updateQty, removeFromCart, clearCart } = useCart();
 
+  const toAbsoluteUrl = (value: string) => {
+    const siteOrigin = typeof window === "undefined" ? "" : window.location.origin;
+    if (!siteOrigin) return value;
+
+    try {
+      return new URL(value, siteOrigin).toString();
+    } catch {
+      return value;
+    }
+  };
+
+  const handleSendWhatsAppOrder = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    window.open(
+      `https://wa.me/${WHATSAPP}?text=${buildWhatsAppMessage()}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+
   /* ── Build WhatsApp message from cart items ── */
   const buildWhatsAppMessage = () => {
-    const lines = items.map(
-      (item) => `• ${item.name}${item.qty > 1 ? ` (×${item.qty})` : ""}`
+    const lines = items.map((item, index) =>
+      [
+        `${index + 1}. ${item.name}`,
+        `Quantity: ${item.qty}`,
+        `Product: ${toAbsoluteUrl(item.href)}`,
+        `Image: ${toAbsoluteUrl(item.image)}`,
+      ].join("\n")
     );
+
     return encodeURIComponent(
-      `Hi Ramirez Ventures! I'd like to enquire about the following items:\n\n${lines.join("\n")}\n\nPlease advise on pricing and availability. Thank you.`
+      `Hi Ramirez Ventures! I'd like to enquire about the following items:\n\n${lines.join("\n\n")}\n\nThe image links show the exact product references from my order list.\n\nPlease advise on pricing and availability. Thank you.`
     );
   };
 
@@ -171,7 +198,7 @@ export default function CartPage() {
               {items.map((item) => (
                 <div key={item.id} className="flex justify-between text-muted-foreground">
                   <span className="line-clamp-1 flex-1 pr-4">{item.name}</span>
-                  <span className="shrink-0 font-medium text-foreground">×{item.qty}</span>
+                  <span className="shrink-0 font-medium text-foreground">x{item.qty}</span>
                 </div>
               ))}
             </div>
@@ -184,7 +211,8 @@ export default function CartPage() {
               asChild
             >
               <a
-                href={`https://wa.me/${WHATSAPP}?text=${buildWhatsAppMessage()}`}
+                href={`https://wa.me/${WHATSAPP}`}
+                onClick={handleSendWhatsAppOrder}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -195,6 +223,9 @@ export default function CartPage() {
 
             <p className="text-center text-xs text-muted-foreground">
               We&apos;ll confirm your order and discuss pricing on WhatsApp
+            </p>
+            <p className="text-center text-xs text-muted-foreground">
+              The message includes product and image links for each item.
             </p>
           </div>
         </div>
