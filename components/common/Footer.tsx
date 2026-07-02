@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { ArrowRight, MapPin, Phone, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 import BrandMark from "@/app/assets/Ramirez Logo 1.png";
 
 /* ── Inline brand SVGs (lucide-react doesn't ship brand icons) ── */
@@ -81,14 +84,27 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[oklch(0.145_0_0)] text-white">
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent" />
+    <motion.footer
+      className="relative overflow-hidden border-t border-white/10 bg-[oklch(0.13_0.018_260)] text-white"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_8%,oklch(0.62_0.26_328_/_0.18),transparent_28%),radial-gradient(circle_at_88%_18%,oklch(0.71_0.145_203_/_0.16),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
 
-      <div className="rv-container py-12 lg:py-14">
+      <div className="rv-container relative py-12 lg:py-14">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1.8fr_1fr]">
-          <div className="flex flex-col gap-5">
-            <Link href="/" className="inline-flex items-center gap-3 text-white">
-              <span className="relative flex size-11 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-white/20">
+          <motion.div
+            className="flex flex-col gap-5"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            <Link href="/" className="group inline-flex items-center gap-3 rounded-lg border border-transparent p-1 pr-3 text-white transition-all duration-200 hover:border-white/10 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/35">
+              <span className="relative flex size-11 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-white/20 transition-transform duration-200 group-hover:scale-105">
               <Image
                 src={BrandMark}
                 alt="Ramirez Ventures logo"
@@ -111,23 +127,42 @@ export default function Footer() {
 
             <div className="flex items-center gap-2">
             {socialLinks.map(({ label, href, icon: Icon }) => (
-              <Link
+              <motion.div
                 key={label}
+                whileHover={{ y: -3, scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+              <Link
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                  className="flex size-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors duration-200 hover:border-primary hover:bg-primary/15 hover:text-white"
+                  className="flex size-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.08] text-white/75 shadow-sm backdrop-blur-xl transition-colors duration-200 hover:border-primary hover:bg-primary/[0.18] hover:text-white focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/35"
               >
                 <Icon />
               </Link>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-          <div className="grid gap-8 sm:grid-cols-3">
+          <motion.div
+            className="grid gap-8 sm:grid-cols-3"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: 0.07 } },
+            }}
+          >
             {productColumns.map((col) => (
-              <div key={col.heading}>
+              <motion.div
+                key={col.heading}
+                variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
                 <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white">
                   {col.heading}
                 </h3>
@@ -136,18 +171,25 @@ export default function Footer() {
                     <li key={href}>
                       <Link
                         href={href}
-                        className="text-sm text-white/65 transition-colors duration-150 hover:text-primary"
+                        className="group inline-flex items-center gap-1.5 text-sm text-white/[0.68] transition-colors duration-150 hover:text-white focus-visible:outline-none focus-visible:text-white"
                       >
                         {label}
+                        <ArrowRight className="size-3 opacity-0 transition-all duration-150 group-hover:translate-x-0.5 group-hover:opacity-70" />
                       </Link>
                     </li>
                   ))}
                 </ul>
-          </div>
+          </motion.div>
         ))}
-          </div>
+          </motion.div>
 
-          <div className="rounded-lg border border-white/10 bg-white/5 p-5">
+          <motion.div
+            className="rounded-lg border border-white/[0.12] bg-white/[0.08] p-5 shadow-[0_22px_70px_-46px_oklch(0_0_0_/_80%)] backdrop-blur-2xl"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.4, ease: "easeOut", delay: 0.08 }}
+          >
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white">
               Find Us
             </h3>
@@ -168,14 +210,14 @@ export default function Footer() {
                 ))}
                 <Link
                   href={`tel:${addr.phone.replace(/\s/g, "")}`}
-                    className="flex items-center gap-2 text-xs text-white/65 transition-colors duration-150 hover:text-white"
+                    className="flex items-center gap-2 text-xs text-white/70 transition-colors duration-150 hover:text-white focus-visible:outline-none focus-visible:text-white"
                 >
                     <Phone className="size-3.5 shrink-0 text-primary" />
                   {addr.phone}
                 </Link>
                 <Link
                   href={`mailto:${addr.email}`}
-                    className="flex items-center gap-2 text-xs text-white/65 transition-colors duration-150 hover:text-white"
+                    className="flex items-center gap-2 text-xs text-white/70 transition-colors duration-150 hover:text-white focus-visible:outline-none focus-visible:text-white"
                 >
                     <Mail className="size-3.5 shrink-0 text-primary" />
                   {addr.email}
@@ -185,23 +227,24 @@ export default function Footer() {
           ))}
             <Link
               href="/contact"
-              className="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/35 active:translate-y-0"
             >
               Start a Project
+              <ArrowRight className="size-4" />
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      <div className="border-t border-white/10">
+      <div className="relative border-t border-white/10 bg-black/10 backdrop-blur-xl">
         <div className="rv-container flex flex-col items-center justify-between gap-3 py-4 text-xs text-white/55 sm:flex-row">
           <span>&copy; {year} Ramirez Ventures. All rights reserved.</span>
           <div className="flex items-center gap-4">
-            <Link href="/privacy" className="transition-colors duration-150 hover:text-white">Privacy Policy</Link>
-            <Link href="/terms" className="transition-colors duration-150 hover:text-white">Terms of Service</Link>
+            <Link href="/privacy" className="transition-colors duration-150 hover:text-white focus-visible:outline-none focus-visible:text-white">Privacy Policy</Link>
+            <Link href="/terms" className="transition-colors duration-150 hover:text-white focus-visible:outline-none focus-visible:text-white">Terms of Service</Link>
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, Search, Menu, X, ChevronDown } from "lucide-react";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import BrandMark from "@/app/assets/Ramirez Logo 1.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -224,17 +224,20 @@ export default function Navbar() {
         }}
         placeholder="Search products or services..."
         className={cn(
-          "h-10 rounded-full border-border/80 bg-muted/45 pl-9 text-foreground caret-primary shadow-inner shadow-black/5 placeholder:text-muted-foreground focus-visible:border-primary focus-visible:bg-background",
+          "h-10 rounded-full border-border/80 bg-background/70 pl-9 text-foreground caret-primary shadow-inner shadow-black/5 backdrop-blur-xl placeholder:text-muted-foreground focus-visible:border-primary focus-visible:bg-background focus-visible:ring-3 focus-visible:ring-primary/20 dark:bg-white/10 dark:focus-visible:bg-card/95",
           mobile && "w-full"
         )}
       />
+      <AnimatePresence>
       {searchFocused && trimmedSearch.length > 0 && (
         <motion.div
+          key="search-results"
           initial={{ opacity: 0, y: -6, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -4, scale: 0.98 }}
           transition={{ duration: 0.18, ease: "easeOut" }}
           className={cn(
-            "absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-lg border border-border/80 bg-popover/95 text-popover-foreground shadow-2xl shadow-black/15 backdrop-blur-xl",
+            "absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-lg border border-border/80 bg-popover/95 text-popover-foreground shadow-2xl shadow-black/15 backdrop-blur-2xl dark:border-white/10 dark:bg-card/95",
             mobile ? "max-h-72 overflow-y-auto" : "right-auto w-[22rem]"
           )}
         >
@@ -246,7 +249,7 @@ export default function Navbar() {
                   type="button"
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => goToSearchResult(item.href)}
-                  className="flex w-full flex-col rounded-md px-3 py-2 text-left transition-colors hover:bg-muted focus:bg-muted focus:outline-none"
+                  className="flex w-full flex-col rounded-md px-3 py-2 text-left transition-colors hover:bg-muted focus:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
                 >
                   <span className="text-sm font-medium text-foreground">{item.label}</span>
                   <span className="text-xs text-muted-foreground">{item.type}</span>
@@ -258,12 +261,13 @@ export default function Navbar() {
           )}
         </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/90 text-foreground shadow-sm shadow-black/5 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80"
+      className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/[0.78] text-foreground shadow-[0_18px_55px_-42px_oklch(0.145_0_0_/_70%)] backdrop-blur-2xl supports-[backdrop-filter]:bg-background/[0.72] dark:border-white/10 dark:bg-background/[0.72]"
       onMouseLeave={() => {
         setDesktopProductsOpen(false);
         setDesktopServicesOpen(false);
@@ -272,8 +276,8 @@ export default function Navbar() {
       <div className="rv-container flex h-16 items-center gap-3">
 
         {/* Logo */}
-        <Link href="/" className="group flex shrink-0 items-center gap-2.5 rounded-full py-1 pr-3 text-foreground transition-colors hover:bg-muted/55">
-          <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-border transition-transform duration-200 group-hover:scale-105">
+        <Link href="/" className="group flex shrink-0 items-center gap-2.5 rounded-full border border-transparent py-1 pl-1 pr-3 text-foreground transition-all duration-200 hover:border-border/70 hover:bg-background/70 hover:shadow-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25 dark:hover:border-white/10 dark:hover:bg-white/10">
+          <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-border transition-transform duration-200 group-hover:scale-105 dark:ring-white/15">
             <Image
               src={BrandMark}
               alt="Ramirez Ventures logo"
@@ -293,11 +297,11 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="ml-4 hidden items-center gap-1 rounded-full border border-border/70 bg-muted/35 p-1 md:flex">
+        <div className="ml-4 hidden items-center gap-1 rounded-full border border-border/70 bg-background/[0.58] p-1 shadow-inner shadow-black/5 backdrop-blur-xl md:flex dark:border-white/10 dark:bg-white/[0.08]">
           {/* Home */}
           <Link
             href="/"
-            className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:bg-background hover:text-foreground"
+            className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-card hover:text-foreground hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 dark:hover:bg-white/10"
           >
             Home
           </Link>
@@ -313,9 +317,10 @@ export default function Navbar() {
               setDesktopServicesOpen(false);
             }}
             className={cn(
-              "flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200",
-              desktopProductsOpen ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:bg-background hover:text-foreground"
+              "flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25",
+              desktopProductsOpen ? "bg-card text-foreground shadow-sm dark:bg-white/10" : "text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm dark:hover:bg-white/10"
             )}
+            aria-expanded={desktopProductsOpen}
           >
             Products
             <ChevronDown
@@ -335,11 +340,12 @@ export default function Navbar() {
               href="/services"
               onClick={() => setDesktopServicesOpen(false)}
               className={cn(
-                "flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200",
+                "flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25",
                 desktopServicesOpen
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-background hover:text-foreground"
+                  ? "bg-card text-foreground shadow-sm dark:bg-white/10"
+                  : "text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm dark:hover:bg-white/10"
               )}
+              aria-expanded={desktopServicesOpen}
             >
               Services
               <ChevronDown
@@ -362,7 +368,7 @@ export default function Navbar() {
           }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
-            "absolute left-0 top-full z-40 hidden w-full origin-top border-b border-border/80 bg-background/95 shadow-2xl shadow-black/10 backdrop-blur-xl transition-all duration-200 md:block",
+            "absolute left-0 top-full z-40 hidden w-full origin-top border-b border-border/80 bg-background/90 shadow-2xl shadow-black/[0.12] backdrop-blur-2xl transition-all duration-200 md:block dark:border-white/10 dark:bg-background/[0.92]",
             desktopProductsOpen
               ? "opacity-100 translate-y-0 pointer-events-auto"
               : "opacity-0 -translate-y-2 pointer-events-none"
@@ -372,11 +378,16 @@ export default function Navbar() {
             {/* Main categories grid */}
             <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {productCategories.map((cat) => (
-                <div key={cat.href} className="rounded-lg border border-border/60 bg-card/70 p-4 transition-colors hover:border-primary/35">
+                <motion.div
+                  key={cat.href}
+                  className="rounded-lg border border-border/70 bg-card/[0.82] p-4 shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md dark:border-white/10 dark:bg-white/[0.08]"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                >
                   <Link
                     href={cat.href}
                     onClick={() => setDesktopProductsOpen(false)}
-                    className="mb-2 block text-sm font-semibold text-foreground transition-colors duration-150 hover:text-primary"
+                    className="mb-2 block text-sm font-semibold text-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
                   >
                     {cat.label}
                   </Link>
@@ -386,7 +397,7 @@ export default function Navbar() {
                         <Link
                           href={item.href}
                           onClick={() => setDesktopProductsOpen(false)}
-                          className="text-xs leading-5 text-muted-foreground transition-colors duration-150 hover:text-primary"
+                          className="text-xs leading-5 text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:text-primary"
                         >
                           {item.label}
                         </Link>
@@ -402,7 +413,7 @@ export default function Navbar() {
                       </Link>
                     </li>
                   </ul>
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -415,7 +426,7 @@ export default function Navbar() {
                     key={cat.href}
                     href={cat.href}
                     onClick={() => setDesktopProductsOpen(false)}
-                    className="rounded-full border border-border/80 bg-card px-3 py-1 text-xs text-muted-foreground transition-colors duration-150 hover:border-primary hover:text-primary"
+                    className="rounded-full border border-border/80 bg-card/[0.85] px-3 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur transition-all duration-150 hover:-translate-y-0.5 hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 dark:border-white/10 dark:bg-white/[0.08]"
                   >
                     {cat.label}
                   </Link>
@@ -438,7 +449,7 @@ export default function Navbar() {
           }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
-            "absolute left-0 top-full z-40 hidden w-full origin-top border-b border-border/80 bg-background/95 shadow-2xl shadow-black/10 backdrop-blur-xl transition-all duration-200 md:block",
+            "absolute left-0 top-full z-40 hidden w-full origin-top border-b border-border/80 bg-background/90 shadow-2xl shadow-black/[0.12] backdrop-blur-2xl transition-all duration-200 md:block dark:border-white/10 dark:bg-background/[0.92]",
             desktopServicesOpen
               ? "opacity-100 translate-y-0 pointer-events-auto"
               : "opacity-0 -translate-y-2 pointer-events-none"
@@ -451,7 +462,7 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setDesktopServicesOpen(false)}
-                  className="rounded-lg border border-border/80 bg-card/70 px-4 py-3 text-sm font-medium text-foreground transition-colors duration-150 hover:border-primary/60 hover:text-primary"
+                  className="rounded-lg border border-border/80 bg-card/[0.85] px-4 py-3 text-sm font-medium text-foreground shadow-sm backdrop-blur transition-all duration-150 hover:-translate-y-0.5 hover:border-primary/60 hover:text-primary hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 dark:border-white/10 dark:bg-white/[0.08]"
                 >
                   {item.label}
                 </Link>
@@ -470,12 +481,12 @@ export default function Navbar() {
           <Button
             size="sm"
             asChild
-            className="bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+            className="bg-primary text-primary-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-md active:translate-y-0"
           >
             <Link href="/contact">Contact</Link>
           </Button>
 
-          <Button variant="ghost" size="icon" asChild className="relative shrink-0 text-foreground hover:bg-muted">
+          <Button variant="ghost" size="icon" asChild className="relative shrink-0 text-foreground transition-all hover:bg-muted hover:shadow-sm dark:hover:bg-white/10">
             <Link href="/cart" aria-label="Shopping cart">
               <ShoppingCart className="size-5" />
               <CartBadge />
@@ -487,7 +498,7 @@ export default function Navbar() {
         <div className="flex items-center gap-1 md:hidden">
           <ThemeToggle />
 
-          <Button variant="ghost" size="icon" asChild className="relative shrink-0 text-foreground hover:bg-muted">
+          <Button variant="ghost" size="icon" asChild className="relative shrink-0 text-foreground transition-all hover:bg-muted hover:shadow-sm dark:hover:bg-white/10">
             <Link href="/cart" aria-label="Shopping cart">
               <ShoppingCart className="size-5" />
               <CartBadge />
@@ -496,9 +507,10 @@ export default function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className="shrink-0 text-foreground"
+            className="shrink-0 text-foreground transition-all hover:bg-muted hover:shadow-sm dark:hover:bg-white/10"
             onClick={() => setMenuOpen((prev) => !prev)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </Button>
@@ -513,7 +525,7 @@ export default function Navbar() {
         }}
         transition={{ duration: 0.2, ease: "easeOut" }}
         className={cn(
-          "overflow-hidden border-t border-border/70 bg-background/95 shadow-2xl shadow-black/10 backdrop-blur-xl transition-all duration-200 md:hidden",
+          "overflow-hidden border-t border-border/70 bg-background/[0.92] shadow-2xl shadow-black/[0.12] backdrop-blur-2xl transition-all duration-200 md:hidden dark:border-white/10 dark:bg-background/[0.94]",
           menuOpen ? "max-h-[80vh] overflow-y-auto" : "max-h-0 border-t-0"
         )}
       >
@@ -525,7 +537,7 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={() => setMenuOpen(false)}
-            className="rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 dark:hover:bg-white/10"
           >
             Home
           </Link>
@@ -534,7 +546,8 @@ export default function Navbar() {
           <div>
             <button
               onClick={() => setMobileProductsOpen((p) => !p)}
-              className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted"
+              className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 dark:hover:bg-white/10"
+              aria-expanded={mobileProductsOpen}
             >
               Products
               <ChevronDown
@@ -550,11 +563,11 @@ export default function Navbar() {
             >
               <div className="flex flex-col gap-3 pb-2 pl-1 pr-1 pt-1">
                 {productCategories.map((cat) => (
-                  <div key={cat.href} className="rounded-lg border border-border/70 bg-card/80 p-3 transition-colors hover:border-primary/35">
+                  <div key={cat.href} className="rounded-lg border border-border/70 bg-card/[0.88] p-3 shadow-sm backdrop-blur transition-colors hover:border-primary/35 dark:border-white/10 dark:bg-white/[0.08]">
                     <Link
                       href={cat.href}
                       onClick={() => setMenuOpen(false)}
-                      className="mb-1 block text-sm font-semibold text-foreground transition-colors duration-150 hover:text-primary"
+                        className="mb-1 block text-sm font-semibold text-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:text-primary"
                     >
                       {cat.label}
                     </Link>
@@ -564,7 +577,7 @@ export default function Navbar() {
                           <Link
                             href={item.href}
                             onClick={() => setMenuOpen(false)}
-                            className="text-xs text-muted-foreground transition-colors duration-150 hover:text-primary"
+                            className="text-xs text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:text-primary"
                           >
                             {item.label}
                           </Link>
@@ -582,7 +595,7 @@ export default function Navbar() {
                         key={cat.href}
                         href={cat.href}
                         onClick={() => setMenuOpen(false)}
-                        className="rounded-full border border-border/80 bg-card px-2.5 py-1 text-xs text-muted-foreground transition-colors duration-150 hover:border-primary hover:text-primary"
+                        className="rounded-full border border-border/80 bg-card/[0.85] px-2.5 py-1 text-xs text-muted-foreground shadow-sm backdrop-blur transition-colors duration-150 hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 dark:border-white/10 dark:bg-white/[0.08]"
                       >
                         {cat.label}
                       </Link>
@@ -597,7 +610,8 @@ export default function Navbar() {
           <div>
             <button
               onClick={() => setMobileServicesOpen((p) => !p)}
-              className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted"
+              className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 dark:hover:bg-white/10"
+              aria-expanded={mobileServicesOpen}
             >
               Services
               <ChevronDown
@@ -615,7 +629,7 @@ export default function Navbar() {
                 <Link
                   href="/services"
                   onClick={() => setMenuOpen(false)}
-                  className="text-xs font-medium text-muted-foreground transition-colors duration-150 hover:text-primary"
+                  className="text-xs font-medium text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:text-primary"
                 >
                   View all Services
                 </Link>
@@ -624,7 +638,7 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className="text-xs text-muted-foreground transition-colors duration-150 hover:text-primary"
+                    className="text-xs text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:text-primary"
                   >
                     {item.label}
                   </Link>
@@ -637,7 +651,7 @@ export default function Navbar() {
           <Link
             href="/contact"
             onClick={() => setMenuOpen(false)}
-            className="mt-2 rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90"
+            className="mt-2 rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/30 active:translate-y-0"
           >
             Contact
           </Link>
