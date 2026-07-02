@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, ChevronRight, MessageCircle } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/lib/cart-context";
@@ -25,8 +26,13 @@ export default function CartPage() {
   /* ── Empty state ── */
   if (items.length === 0) {
     return (
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center gap-6 text-center">
-        <div className="flex size-20 items-center justify-center rounded-full bg-muted">
+      <motion.section
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center gap-6 text-center"
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+      >
+        <div className="rv-glass flex size-20 items-center justify-center rounded-full">
           <ShoppingBag className="size-9 text-muted-foreground" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">Your order list is empty</h1>
@@ -36,7 +42,7 @@ export default function CartPage() {
         <Button asChild size="lg">
           <Link href="/">Browse Products</Link>
         </Button>
-      </section>
+      </motion.section>
     );
   }
 
@@ -67,10 +73,16 @@ export default function CartPage() {
       <div className="grid gap-10 lg:grid-cols-[1fr_360px]">
         {/* ── Cart items ── */}
         <div className="flex flex-col gap-4">
+          <AnimatePresence initial={false}>
           {items.map((item) => (
-            <div
+            <motion.div
               key={item.id}
-              className="flex gap-4 rounded-xl border border-border bg-card p-4 shadow-sm"
+              className="rv-premium-panel flex gap-4 p-4"
+              layout
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, x: 18 }}
+              transition={{ duration: 0.24, ease: "easeOut" }}
             >
               {/* Thumbnail */}
               <Link href={item.href} className="shrink-0">
@@ -128,8 +140,9 @@ export default function CartPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
+          </AnimatePresence>
 
           {/* Continue shopping */}
           <div className="mt-2">
@@ -144,7 +157,7 @@ export default function CartPage() {
 
         {/* ── Enquiry panel ── */}
         <div className="flex flex-col gap-4">
-          <div className="rounded-xl border border-border bg-card p-6 shadow-sm flex flex-col gap-5">
+          <div className="rv-premium-panel sticky top-24 p-6 flex flex-col gap-5">
             <div>
               <h2 className="font-bold text-lg text-foreground">Send Enquiry</h2>
               <p className="text-sm text-muted-foreground mt-1">

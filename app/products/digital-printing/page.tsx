@@ -16,10 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { localProductImage } from "@/lib/local-product-images";
 
 /* ─── placeholder helper ─── */
-const ph = (w: number, h: number, label: string) =>
-  `https://placehold.co/${w}x${h}/e0f2fe/0284c7?text=${encodeURIComponent(label)}`;
+const ph = (_w: number, _h: number, label: string) => localProductImage(label);
 
 /* ─── Sidebar: all 8 product categories ─── */
 const productCategories = [
@@ -178,7 +178,7 @@ export default function DigitalPrintingPage() {
 
           {/* ── Sidebar ── */}
           <aside className="hidden lg:block w-56 shrink-0 sticky top-24">
-            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+            <div className="rv-premium-panel p-4">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3 px-2">
                 Product Categories
               </h2>

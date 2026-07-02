@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, Search, Menu, X, ChevronDown } from "lucide-react";
 import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
 import BrandMark from "@/app/assets/Ramirez Logo 1.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -228,7 +229,10 @@ export default function Navbar() {
         )}
       />
       {searchFocused && trimmedSearch.length > 0 && (
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: -6, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
           className={cn(
             "absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-lg border border-border/80 bg-popover/95 text-popover-foreground shadow-2xl shadow-black/15 backdrop-blur-xl",
             mobile ? "max-h-72 overflow-y-auto" : "right-auto w-[22rem]"
@@ -252,7 +256,7 @@ export default function Navbar() {
           ) : (
             <p className="px-3 py-3 text-sm text-muted-foreground">No matching product or service found.</p>
           )}
-        </div>
+        </motion.div>
       )}
     </div>
   );
@@ -349,8 +353,14 @@ export default function Navbar() {
         </div>
 
         {/* Full-width mega-dropdown, anchored to header */}
-        <div
+        <motion.div
           onMouseEnter={() => setDesktopProductsOpen(true)}
+          animate={{
+            opacity: desktopProductsOpen ? 1 : 0,
+            y: desktopProductsOpen ? 0 : -8,
+            scale: desktopProductsOpen ? 1 : 0.99,
+          }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
             "absolute left-0 top-full z-40 hidden w-full origin-top border-b border-border/80 bg-background/95 shadow-2xl shadow-black/10 backdrop-blur-xl transition-all duration-200 md:block",
             desktopProductsOpen
@@ -413,14 +423,20 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Services dropdown */}
-        <div
+        <motion.div
           onMouseEnter={() => {
             setDesktopServicesOpen(true);
             setDesktopProductsOpen(false);
           }}
+          animate={{
+            opacity: desktopServicesOpen ? 1 : 0,
+            y: desktopServicesOpen ? 0 : -8,
+            scale: desktopServicesOpen ? 1 : 0.99,
+          }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
             "absolute left-0 top-full z-40 hidden w-full origin-top border-b border-border/80 bg-background/95 shadow-2xl shadow-black/10 backdrop-blur-xl transition-all duration-200 md:block",
             desktopServicesOpen
@@ -442,7 +458,7 @@ export default function Navbar() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Spacer */}
         <div className="flex-1" />
@@ -490,7 +506,12 @@ export default function Navbar() {
       </div>
 
       {/* Mobile dropdown */}
-      <div
+      <motion.div
+        animate={{
+          opacity: menuOpen ? 1 : 0,
+          y: menuOpen ? 0 : -8,
+        }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         className={cn(
           "overflow-hidden border-t border-border/70 bg-background/95 shadow-2xl shadow-black/10 backdrop-blur-xl transition-all duration-200 md:hidden",
           menuOpen ? "max-h-[80vh] overflow-y-auto" : "max-h-0 border-t-0"
@@ -621,7 +642,7 @@ export default function Navbar() {
             Contact
           </Link>
         </div>
-      </div>
+      </motion.div>
     </header>
   );
 }

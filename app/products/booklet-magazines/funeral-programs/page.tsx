@@ -14,10 +14,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useCart } from "@/lib/cart-context";
+import { localProductImage } from "@/lib/local-product-images";
 
 /* ─── placeholder helper ─── */
-const ph = (w: number, h: number, label: string) =>
-  `https://placehold.co/${w}x${h}/e0f2fe/0284c7?text=${encodeURIComponent(label)}`;
+const ph = (_w: number, _h: number, label: string) => localProductImage(label);
 
 const WHATSAPP = "254706207037";
 
@@ -133,7 +133,7 @@ export default function FuneralProgramsPage() {
             </div>
 
             {/* Product Overview */}
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-xl font-bold text-foreground mb-4">Product Overview</h2>
               <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
                 <p>
@@ -167,7 +167,7 @@ export default function FuneralProgramsPage() {
             </div>
 
             {/* FAQ */}
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-xl font-bold text-foreground mb-4">
                 Frequently Asked Questions
               </h2>
@@ -189,7 +189,7 @@ export default function FuneralProgramsPage() {
           {/* ════ RIGHT COLUMN: Formats + Order ════ */}
           <div className="flex flex-col gap-8">
             {/* Available Formats */}
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-lg font-semibold text-foreground mb-4">Available Formats</h2>
               <div className="overflow-hidden rounded-lg border border-border">
                 <table className="w-full text-sm">
@@ -233,7 +233,7 @@ export default function FuneralProgramsPage() {
             </div>
 
             {/* Order Methods */}
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-lg font-semibold text-foreground mb-1">Order Now</h2>
               <p className="text-sm text-muted-foreground mb-5">
                 Selected:{" "}
@@ -276,7 +276,7 @@ export default function FuneralProgramsPage() {
             </div>
 
             {/* Trust badges */}
-            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <div className="rv-premium-panel p-5">
               <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5 size-4 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0 text-[10px] font-bold">✓</span>
@@ -309,7 +309,7 @@ export default function FuneralProgramsPage() {
               <Link
                 key={product.href}
                 href={product.href}
-                className="group rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                className="rv-product-card group"
               >
                 <div className="relative aspect-4/3 overflow-hidden bg-muted">
                   <Image

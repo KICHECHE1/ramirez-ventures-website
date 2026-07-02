@@ -14,6 +14,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useCart } from "@/lib/cart-context";
+import { localProductImage } from "@/lib/local-product-images";
 
 {/*Images */}
 import Brochures from "@/app/assets/brochure.jpg";
@@ -21,8 +22,7 @@ import Flyers from "@/app/assets/flyers.jpeg";
 import Poster from "@/app/assets/Poster.jpg";
 import Document from "@/app/assets/document printing.jpg";
 
-const ph = (w: number, h: number, label: string) =>
-  `https://placehold.co/${w}x${h}/e0f2fe/0284c7?text=${encodeURIComponent(label)}`;
+const ph = (_w: number, _h: number, label: string) => localProductImage(label);
 
 const WHATSAPP = "254706207037";
 
@@ -135,7 +135,7 @@ export default function FlyersPrintingPage() {
               />
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-xl font-bold text-foreground mb-4">Product Overview</h2>
               <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
                 <p>
@@ -169,7 +169,7 @@ export default function FlyersPrintingPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
               <Accordion type="single" collapsible className="w-full">
                 {faqs.map((faq, i) => (
@@ -188,7 +188,7 @@ export default function FlyersPrintingPage() {
 
           {/* RIGHT */}
           <div className="flex flex-col gap-8">
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-lg font-semibold text-foreground mb-4">Available Sizes &amp; Finishes</h2>
               <div className="overflow-hidden rounded-lg border border-border">
                 <table className="w-full text-sm">
@@ -225,7 +225,7 @@ export default function FlyersPrintingPage() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="rv-premium-panel p-6">
               <h2 className="text-lg font-semibold text-foreground mb-1">Order Now</h2>
               <p className="text-sm text-muted-foreground mb-5">
                 Selected: <span className="font-medium text-foreground">{selectedSize.label}, {selectedSize.dimensions}</span>
@@ -260,7 +260,7 @@ export default function FlyersPrintingPage() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <div className="rv-premium-panel p-5">
               <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5 size-4 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0 text-[10px] font-bold">✓</span>
@@ -292,7 +292,7 @@ export default function FlyersPrintingPage() {
               <Link
                 key={product.href}
                 href={product.href}
-                className="group rounded-xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md transition-shadow"
+                className="rv-product-card group"
               >
                 <div className="relative aspect-4/3 bg-muted overflow-hidden">
                   <Image

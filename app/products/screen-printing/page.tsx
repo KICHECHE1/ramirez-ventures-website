@@ -15,9 +15,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { localProductImage } from "@/lib/local-product-images";
 
-const ph = (w: number, h: number, label: string) =>
-  `https://placehold.co/${w}x${h}/e0f2fe/0284c7?text=${encodeURIComponent(label)}`;
+const ph = (_w: number, _h: number, label: string) => localProductImage(label);
 
 const THIS_HREF = "/products/screen-printing";
 
@@ -193,7 +193,7 @@ export default function ScreenPrintingPage() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="flex gap-10 lg:items-start">
           <aside className="sticky top-24 hidden w-56 shrink-0 lg:block">
-            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+            <div className="rv-premium-panel p-4">
               <h2 className="mb-3 px-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Product Categories
               </h2>
@@ -300,7 +300,7 @@ export default function ScreenPrintingPage() {
                 {products.map((product) => (
                   <div
                     key={product.id}
-                    className="overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md"
+                    className="rv-product-card group"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                       <Image

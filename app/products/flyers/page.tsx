@@ -212,7 +212,7 @@ export default function FlyersPage() {
 
           {/* ── Sidebar ── */}
           <aside className="hidden lg:block w-56 shrink-0 sticky top-24">
-            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+            <div className="rv-premium-panel p-4">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3 px-2">
                 Product Categories
               </h2>
@@ -342,7 +342,7 @@ export default function FlyersPage() {
                 {flyerDescriptions.map((item, index) => (
                   <div
                     key={item.name}
-                    className="rounded-xl border border-border bg-card p-6 flex gap-5"
+                    className="rv-premium-panel p-6 flex gap-5"
                   >
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 mt-0.5">
                       <span className="text-sm font-bold text-primary">{index + 1}</span>

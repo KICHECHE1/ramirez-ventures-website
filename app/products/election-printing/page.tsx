@@ -5,10 +5,10 @@ import Image from "next/image";
 import { Phone, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { localProductImage } from "@/lib/local-product-images";
 
 /* ─── placeholder helper ─── */
-const ph = (w: number, h: number, label: string) =>
-  `https://placehold.co/${w}x${h}/e0f2fe/0284c7?text=${encodeURIComponent(label)}`;
+const ph = (_w: number, _h: number, label: string) => localProductImage(label);
 
 /* ─── Products ─── */
 interface ElectionProduct {
@@ -143,7 +143,7 @@ export default function ElectionPrintingPage() {
                 {electionProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="group rounded-xl border border-border bg-card overflow-hidden shadow-sm"
+                    className="rv-product-card group"
                   >
                     {/* Image */}
                     <div className="relative aspect-[4/3] bg-muted overflow-hidden">

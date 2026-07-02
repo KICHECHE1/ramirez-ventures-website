@@ -7,6 +7,7 @@ import {
   ShoppingCart, Star, Truck, ShieldCheck, ThumbsUp,
   Printer, Palette, Clock, Award, ArrowRight, Phone,
 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -282,7 +283,11 @@ function Stars() {
 /* ─── Product card ─── */
 function ProductCard({ product, onAddToCart }: { product: Product; onAddToCart: (p: AddToCartInput) => void }) {
   return (
-    <div className="rv-product-card group flex flex-col">
+    <motion.div
+      className="rv-product-card group flex flex-col"
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 260, damping: 22 }}
+    >
       
       {/* ✅ Image container - all visual effects stay HERE */}
       <Link href={product.href} className="block relative overflow-hidden aspect-square">
@@ -313,7 +318,7 @@ function ProductCard({ product, onAddToCart }: { product: Product; onAddToCart: 
         </Button>
       </div>
       
-    </div>
+    </motion.div>
   );
 }
 
@@ -334,11 +339,29 @@ function SectionWrapper({ id, title, href, products, onAddToCart }: ProductSecti
             View all <ArrowRight className="size-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <motion.div
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.055 } },
+          }}
+        >
           {products.map((p) => (
-            <ProductCard key={p.href + p.name} product={p} onAddToCart={(prod) => onAddToCart(prod)} />
+            <motion.div
+              key={p.href + p.name}
+              variants={{
+                hidden: { opacity: 0, y: 18 },
+                show: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+              <ProductCard product={p} onAddToCart={(prod) => onAddToCart(prod)} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -368,11 +391,19 @@ export default function HomePage() {
     <div className="flex flex-col">
 
       {/* ── Cart toast ── */}
-      {cartMsg && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg animate-in slide-in-from-bottom-4 duration-300">
-          {cartMsg}
-        </div>
-      )}
+      <AnimatePresence>
+        {cartMsg && (
+          <motion.div
+            className="fixed bottom-6 right-6 z-50 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg"
+            initial={{ opacity: 0, y: 18, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+          >
+            {cartMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ══════════════════════════════════════════════
           HERO CAROUSEL
@@ -383,29 +414,58 @@ export default function HomePage() {
 
         {/* Slide stack, all slides share the same grid cell, fade in/out */}
         <div className="rv-container">
-          <div className="grid">
+          <div className="grid min-h-[620px] items-center sm:min-h-[560px] lg:min-h-[520px]">
             {heroSlides.map((slide, idx) => (
-              <div
+              <motion.div
                 key={idx}
                 className={`[grid-area:1/1] transition-opacity duration-2000 ease-in-out ${
                   currentSlide === idx
                     ? "opacity-100 pointer-events-auto"
                     : "opacity-0 pointer-events-none"
                 }`}
+                animate={{
+                  opacity: currentSlide === idx ? 1 : 0,
+                  y: currentSlide === idx ? 0 : 18,
+                  scale: currentSlide === idx ? 1 : 0.985,
+                }}
+                transition={{ duration: 0.65, ease: "easeOut" }}
               >
                 <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
 
                   {/* Left */}
-                  <div className="flex flex-col gap-6">
+                  <motion.div
+                    className="flex flex-col gap-6"
+                    initial={false}
+                    animate={currentSlide === idx ? "show" : "hidden"}
+                    variants={{
+                      hidden: {},
+                      show: { transition: { staggerChildren: 0.075 } },
+                    }}
+                  >
+                    <motion.div
+                      variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
+                      transition={{ duration: 0.45, ease: "easeOut" }}
+                    >
                     <Badge className="w-fit border-white/20 bg-white/15 text-white backdrop-blur-sm hover:bg-white/20">
                       {slide.badge}
                     </Badge>
+                    </motion.div>
+                    <motion.div
+                      variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
+                      transition={{ duration: 0.45, ease: "easeOut" }}
+                    >
                     <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
                       {slide.name}
                     </h1>
+                    </motion.div>
+                    <motion.div
+                      variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } }}
+                      transition={{ duration: 0.45, ease: "easeOut" }}
+                    >
                     <p className="max-w-xl text-lg leading-relaxed text-white/80">
                       {slide.description}
                     </p>
+                    </motion.div>
                     <div className="flex items-center gap-3">
                       <Stars />
                       <span className="text-sm text-white/70">(128 reviews)</span>
@@ -423,11 +483,18 @@ export default function HomePage() {
                         <Link href="/products">View All Categories</Link>
                       </Button>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Right, product image */}
-                  <div className="relative flex items-center justify-center">
-                    <div className="absolute inset-4 rounded-lg border border-white/15 bg-white/10 backdrop-blur-sm" />
+                  <motion.div
+                    className="relative flex items-center justify-center"
+                    animate={{
+                      opacity: currentSlide === idx ? 1 : 0,
+                      scale: currentSlide === idx ? 1 : 0.96,
+                    }}
+                    transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
+                  >
+                    <div className="rv-image-shell absolute inset-4" />
                     <Image
                       src={slide.image}
                       alt={slide.name}
@@ -436,10 +503,10 @@ export default function HomePage() {
                       className="relative aspect-[5/4] w-full max-w-lg rounded-lg object-cover shadow-2xl ring-1 ring-white/15"
                       priority={idx === 0}
                     />
-                  </div>
+                  </motion.div>
 
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -501,29 +568,40 @@ export default function HomePage() {
             <p className="rv-kicker mb-1">What We Offer</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground">Our Printing Services</h2>
           </div>
-          <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-4 sm:gap-6">
+          <motion.div
+            className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-4 sm:gap-6"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04 } } }}
+          >
             {printingServices.map((svc) => (
-              <Link
+              <motion.div
                 key={svc.href}
-                href={svc.href}
-                className="group flex flex-col items-center gap-2"
+                variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                {/* ✅ Removed bg-muted to prevent background behind circular image */}
-                <div className="relative size-16 sm:size-20 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors duration-200">
-                  <Image
-                    src={svc.image}
-                    alt={svc.label}
-                    width={80}
-                    height={80}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-                <span className="text-center text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors duration-150 leading-tight">
-                  {svc.label}
-                </span>
-              </Link>
+                <Link
+                  href={svc.href}
+                  className="group flex flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-muted/45 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/35"
+                >
+                  {/* ✅ Removed bg-muted to prevent background behind circular image */}
+                  <div className="relative size-16 sm:size-20 rounded-full overflow-hidden border-2 border-border shadow-md group-hover:border-primary transition-colors duration-200">
+                    <Image
+                      src={svc.image}
+                      alt={svc.label}
+                      width={80}
+                      height={80}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </div>
+                  <span className="text-center text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors duration-150 leading-tight">
+                    {svc.label}
+                  </span>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 

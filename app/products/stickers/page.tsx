@@ -224,7 +224,7 @@ export default function StickersPage() {
 
           {/* Sidebar */}
           <aside className="hidden lg:block w-56 shrink-0 sticky top-24">
-            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+            <div className="rv-premium-panel p-4">
               <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3 px-2">
                 Product Categories
               </h2>
@@ -340,7 +340,7 @@ export default function StickersPage() {
                 {products.map((product) => (
                   <div
                     key={product.id}
-                    className="rounded-xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                    className="rv-product-card group"
                   >
                     <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                       <Image

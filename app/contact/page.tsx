@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { MapPin, Phone, Mail, Send } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -56,16 +57,21 @@ export default function ContactPage() {
   return (
     <>
       {/* ── Page hero ── */}
-      <section className="bg-muted/40 border-b border-border">
+      <motion.section
+        className="rv-hero-surface border-b border-white/10 text-white"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
             Get in Touch
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="mt-4 text-lg text-white/80 max-w-2xl mx-auto">
             We&apos;d love to hear from you. Reach out for quotes, support, or just to say hello.
           </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── Main content ── */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
@@ -77,9 +83,13 @@ export default function ContactPage() {
               <h2 className="text-2xl font-bold text-foreground mb-6">Find Us</h2>
               <div className="flex flex-col gap-8">
                 {addresses.map((addr) => (
-                  <div
+                  <motion.div
                     key={addr.city}
-                    className="rounded-xl border border-border bg-card p-6 shadow-sm flex flex-col gap-4"
+                    className="rv-premium-panel p-6 flex flex-col gap-4"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   >
                     <p className="font-semibold text-foreground text-base">{addr.city}</p>
                     <address className="not-italic flex flex-col gap-3">
@@ -116,13 +126,19 @@ export default function ContactPage() {
                       <WhatsAppIcon />
                       Chat on WhatsApp
                     </Link>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
 
             {/* Business hours */}
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <motion.div
+              className="rv-premium-panel p-6"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.4, ease: "easeOut", delay: 0.05 }}
+            >
               <h3 className="font-semibold text-foreground mb-4">Business Hours</h3>
               <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
                 <li className="flex justify-between">
@@ -138,15 +154,29 @@ export default function ContactPage() {
                   <span className="font-medium text-foreground">9:00 AM  to  4:00 PM</span>
                 </li>
               </ul>
-            </div>
+            </motion.div>
           </div>
 
           {/* ── Right column: Contact form ── */}
-          <div className="rounded-xl border border-border bg-card p-8 shadow-sm">
+          <motion.div
+            className="rv-premium-panel p-8"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.4, ease: "easeOut", delay: 0.08 }}
+          >
             <h2 className="text-2xl font-bold text-foreground mb-6">Send a Message</h2>
 
+            <AnimatePresence mode="wait">
             {submitted ? (
-              <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
+              <motion.div
+                key="submitted"
+                className="flex flex-col items-center justify-center gap-4 py-16 text-center"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.24, ease: "easeOut" }}
+              >
                 <div className="flex size-14 items-center justify-center rounded-full bg-primary/10">
                   <Send className="size-6 text-primary" />
                 </div>
@@ -157,9 +187,17 @@ export default function ContactPage() {
                 <Button variant="outline" onClick={() => setSubmitted(false)}>
                   Send another message
                 </Button>
-              </div>
+              </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <motion.form
+                key="form"
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-5"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.24, ease: "easeOut" }}
+              >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="name" className="text-sm font-medium text-foreground">
@@ -239,9 +277,10 @@ export default function ContactPage() {
                   Send Message
                 </Button>
                 
-              </form>
+              </motion.form>
             )}
-          </div>
+            </AnimatePresence>
+          </motion.div>
         </div>
       </section>
     </>
